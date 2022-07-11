@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
-class HomeController {
+class NotFoundController {
     public function index()
     {
-        echo 'Home';
+        echo 'Not found';
     }
 }
