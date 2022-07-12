@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Router;
+use App\Request;
 
 class App {
     public function __construct()
@@ -15,8 +16,10 @@ class App {
         $requestedMethod = $router->getRequestedMethod();
         $params = $router->getParams();
 
+        $request = new Request($params);
+
         $controller = new $requestedController;
-        $controller->{$requestedMethod}(...$params);
+        $controller->{$requestedMethod}($request);
     }
 
     private function autoloadClasses()
