@@ -30,13 +30,25 @@ class Database {
         }
     }
 
-    public function query(string $sql, array $values = [])
+    public function query(string $sql, array $values = []): self
     {
         $this->statement = $this->pdo->prepare($sql);
         $this->statement->execute($values);
+
+        return $this;
     }
 
-    public function count()
+    public function results(): array
+    {
+        return $this->statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function first(): array
+    {
+        return $this->results()[0];
+    }
+
+    public function count(): int
     {
         return $this->statement->rowCount();
     }

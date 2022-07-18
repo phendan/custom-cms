@@ -12,11 +12,9 @@ use App\Models\User;
 class RegisterController extends BaseController {
     public function index(Request $request)
     {
-        $db = new Database;
-
         if ($request->getMethod() === 'POST') {
             $formInput = $request->getInput();
-            $validation = new FormValidation($formInput, $db);
+            $validation = new FormValidation($formInput, $this->db);
 
             $validation->setRules([
                 'firstName' => 'required|min:2|max:32',
@@ -35,8 +33,7 @@ class RegisterController extends BaseController {
                 return;
             }
 
-            $user = new User($db);
-            $user->register($formInput);
+            $this->user->register($formInput);
         }
 
         $this->view->render('register');

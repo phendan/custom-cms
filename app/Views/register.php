@@ -51,5 +51,5 @@
         <input type="password" id="password-again" name="passwordAgain">
     </div>
 
-    <input type="submit" value="register">
+    <input type="submit" value="Register">
 </form>
