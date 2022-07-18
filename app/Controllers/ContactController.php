@@ -2,7 +2,9 @@
 
 namespace App\Controllers;
 
-class ContactController {
+use App\BaseController;
+
+class ContactController extends BaseController {
     public function index()
     {
         echo 'Contact';
