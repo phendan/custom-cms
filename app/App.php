@@ -8,7 +8,7 @@ use App\Request;
 class App {
     public function __construct()
     {
-        $this->autoloadClasses();
+        //$this->autoloadClasses();
 
         $router = new Router;
 
