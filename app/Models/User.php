@@ -4,13 +4,14 @@ namespace App\Models;
 
 use App\Models\Database;
 use Exception;
+use App\Helpers\Str;
 
 class User {
     private Database $db;
     private string $id;
     private string $email;
-    private string $first_name;
-    private string $last_name;
+    private string $firstName;
+    private string $lastName;
     private string $password;
 
     public function __construct(Database $db)
@@ -32,7 +33,8 @@ class User {
         $userData = $userQuery->first();
 
         foreach ($userData as $column => $value) {
-            $this->{$column} = $value;
+            $columnCamelCase = Str::toCamelCase($column);
+            $this->{$columnCamelCase} = $value;
         }
 
         return true;
