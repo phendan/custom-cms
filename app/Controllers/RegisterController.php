@@ -24,6 +24,10 @@ class RegisterController extends BaseController {
                 'passwordAgain' => 'required|matches:password'
             ]);
 
+            /*$validation->setMessages([
+                'passwordAgain.matches' => "You didn't repeat the password correctly"
+            ]);*/
+
             $validation->validate();
 
             if ($validation->fails()) {

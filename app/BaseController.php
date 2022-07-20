@@ -15,7 +15,7 @@ class BaseController {
     {
         $this->db = new Database;
         $this->user = new User($this->db);
-        $this->view = new View;
+        $this->view = new View($this->user);
     }
 
     protected function redirectTo(string $path)

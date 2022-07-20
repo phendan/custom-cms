@@ -16,8 +16,8 @@ class DashboardController extends BaseController {
 
         $this->user->find($_SESSION['userId']);
 
-        echo $this->user->getEmail();
-
-        echo 'Dashboard';
+        $this->view->render('dashboard', [
+            'user' => $this->user
+        ]);
     }
 }
