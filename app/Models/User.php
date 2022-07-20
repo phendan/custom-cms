@@ -73,6 +73,10 @@ class User {
         // Login
         $_SESSION['userId'] = $this->getId();
     }
+
+    public function logout(): void
+    {
+        unset($_SESSION['userId']);
     }
 
     public function isLoggedIn(): bool
@@ -82,7 +86,7 @@ class User {
 
     public function getId(): int
     {
-        return $this->id;
+        return (int) $this->id;
     }
 
     public function getEmail(): string
@@ -92,11 +96,11 @@ class User {
 
     public function getFirstName(): string
     {
-        return $this->first_name;
+        return $this->firstName;
     }
 
     public function getLastName(): string
     {
-        return $this->last_name;
+        return $this->lastName;
     }
 }
