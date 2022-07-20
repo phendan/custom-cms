@@ -5,6 +5,8 @@
         <div class="error"><?=$errors['root']?></div>
     <?php endif; ?>
 
+    <input type="hidden" name="csrfToken" value="<?php echo $csrf::token() ?>">
+
     <div>
         <label for="email">Email</label>
 

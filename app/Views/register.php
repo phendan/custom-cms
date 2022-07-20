@@ -1,6 +1,12 @@
 <h1>Register</h1>
 
 <form method="post" novalidate>
+    <?php if (isset($errors['root'])): ?>
+        <div class="error"><?=$errors['root']?></div>
+    <?php endif; ?>
+
+    <input type="hidden" name="csrfToken" value="<?php echo $csrf::token() ?>">
+
     <div>
         <label for="first-name">First Name</label>
 
