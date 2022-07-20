@@ -60,25 +60,19 @@ class User {
 
     public function login(array $userData): void
     {
-        $sql = 'SELECT * FROM `users` WHERE `email` = :email';
-
-        $userQuery = $this->db->query($sql, [
-            'email' => $userData['email']
-        ]);
-
-        if ($userQuery->count() < 1) {
-            throw new Exception('This email address could not be found');
+        if (!$this->find($userData['email'])) {
+            throw new Exception('The email could not be found.');
         }
 
-        $queryResult = $userQuery->results()[0];
-        $hash = $queryResult['password'];
+        $hash = $this->password;
 
         if (!password_verify($userData['password'], $hash)) {
             throw new Exception('The password was incorrect.');
         }
 
         // Login
-        $_SESSION['userId'] = (int) $queryResult['id'];
+        $_SESSION['userId'] = $this->getId();
+    }
     }
 
     public function isLoggedIn(): bool
