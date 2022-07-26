@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\View;
 use App\BaseController;
+use App\Helpers\Session;
 use App\Request;
 use App\Models\FormValidation;
 use App\Models\Database;
@@ -38,6 +39,8 @@ class RegisterController extends BaseController {
             }
 
             $this->user->register($formInput);
+            Session::flash('message', 'Your account has been successfully created!');
+            $this->redirectTo('/login');
         }
 
         $this->view->render('register');

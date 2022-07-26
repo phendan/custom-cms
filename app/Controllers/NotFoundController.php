@@ -2,8 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Request;
+
 class NotFoundController {
-    public function index()
+    public function index(Request $index)
     {
         echo 'Not found';
     }
