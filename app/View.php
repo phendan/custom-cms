@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\User;
 use App\Helpers\CSRFProtection;
+use App\Helpers\Session;
 
 class View {
     private User $user;
@@ -19,6 +20,7 @@ class View {
         $user = $this->user;
 
         $csrf = CSRFProtection::class;
+        $session = Session::class;
 
         require_once '../app/Views/partials/header.php';
         require_once "../app/Views/{$view}.php";

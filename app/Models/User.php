@@ -86,7 +86,7 @@ class User {
 
     public function getId(): int
     {
-        return (int) $this->id;
+        return (int) ($this->id ?? $_SESSION['userId']);
     }
 
     public function getEmail(): string

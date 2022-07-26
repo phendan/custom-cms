@@ -16,8 +16,13 @@
                         <li><a href="/register">Register</a></li>
                         <li><a href="/login">Login</a></li>
                     <?php else: ?>
+                        <li><a href="/post/create">Create Post</a></li>
                         <li><a href="/logout">Sign Out</a></li>
                     <?php endif; ?>
                 </ul>
             </nav>
         </header>
+
+        <div class="messages">
+            <?php echo $session::flash('message'); ?>
+        </div>
