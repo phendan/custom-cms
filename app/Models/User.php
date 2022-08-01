@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Database;
 use Exception;
 use App\Helpers\Str;
+use App\Models\Post;
 
 class User {
     private Database $db;
@@ -84,6 +85,20 @@ class User {
         return isset($_SESSION['userId']);
     }
 
+    public function getPosts(): array
+    {
+        $sql = "SELECT * FROM `posts` WHERE `user_id` = :user_id";
+        $postsQuery = $this->db->query($sql, [ 'user_id' => $this->getId() ]);
+
+        $posts = [];
+
+        foreach ($postsQuery->results() as $result) {
+            $posts[] = new Post($this->db, $result);
+        }
+
+        return $posts;
+    }
+
     public function getId(): int
     {
         return (int) ($this->id ?? $_SESSION['userId']);
@@ -102,5 +117,10 @@ class User {
     public function getLastName(): string
     {
         return $this->lastName;
+    }
+
+    public function getFullName(): string
+    {
+        return "{$this->firstName} {$this->lastName}";
     }
 }

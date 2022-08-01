@@ -14,8 +14,6 @@ class DashboardController extends BaseController {
             $this->redirectTo('/login');
         }
 
-        $this->user->find($_SESSION['userId']);
-
         $this->view->render('dashboard', [
             'user' => $this->user
         ]);
