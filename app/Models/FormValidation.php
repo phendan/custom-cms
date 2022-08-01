@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use App\Models\Database;
+use App\Interfaces\ValidationInterface;
 
-class FormValidation {
+class FormValidation implements ValidationInterface {
     private array $formInput;
     private array $rules;
     private array $errors = [];

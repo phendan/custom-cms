@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Database;
 use App\Helpers\Str;
 use App\Models\User;
+use App\Config;
 
 class Post {
     private Database $db;
@@ -41,7 +42,7 @@ class Post {
         }
     }
 
-    public function create(int $userId, array $postData)
+    public function create(int $userId, array $postData, array $image)
     {
         $sql = "
             INSERT INTO `posts`
@@ -57,6 +58,27 @@ class Post {
             'slug' => $slug,
             'body' => $postData['body'],
             'createdAt' => time()
+        ]);
+
+        $sql = "SELECT MAX(`id`) AS 'id' FROM `posts` WHERE `user_id` = :user_id";
+        $postQuery = $this->db->query($sql, [ 'user_id' => $userId ]);
+
+        $postId = $postQuery->first()['id'];
+
+        $fileStorage = new FileStorage($image);
+        $fileStorage->saveIn(Config::get('app.uploadFolder'));
+        $imageName = $fileStorage->getGeneratedName();
+
+        $sql = "
+            INSERT INTO `post_images`
+            (`post_id`, `filename`, `created_at`)
+            VALUES (:post_id, :filename, :created_at)
+        ";
+
+        $this->db->query($sql, [
+            'post_id' => $postId,
+            'filename' => $imageName,
+            'created_at' => time()
         ]);
     }
 

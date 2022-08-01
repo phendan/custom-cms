@@ -1,6 +1,6 @@
 <h1>Write Your Post</h1>
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <?php if (isset($errors['root'])): ?>
         <div class="error"><?=$errors['root']?></div>
     <?php endif; ?>
@@ -25,6 +25,16 @@
         <?php endif; ?>
 
         <textarea name="body" id="body"></textarea>
+    </div>
+
+    <div>
+        <label for="image">Image</label>
+
+        <?php if (isset($errors['image'])): ?>
+            <div class="error"><?=$errors['image'][0]?></div>
+        <?php endif; ?>
+
+        <input type="file" id="image" name="image">
     </div>
 
     <input type="submit" value="Create Post">

@@ -7,6 +7,8 @@ use App\Helpers\Session;
 use App\Request;
 use App\Models\FormValidation;
 use App\Models\Post;
+use App\Models\FileValidation;
+use Exception;
 
 class PostController extends BaseController {
     public function index(Request $request)
@@ -43,25 +45,45 @@ class PostController extends BaseController {
 
         $formInput = $request->getInput();
 
-        $validation = new FormValidation($formInput, $this->db);
+        $formValidation = new FormValidation($formInput, $this->db);
 
-        $validation->setRules([
+        $formValidation->setRules([
             'title' => 'required|min:10|max:64',
             'body' => 'required|min:100'
         ]);
 
-        $validation->validate();
+        $formValidation->validate();
 
-        if ($validation->fails()) {
+        $fileInput = $request->getInput('file');
+
+        $fileValidation = new FileValidation($fileInput);
+        $fileValidation->setRules([
+            'image' => 'required|type:image|maxsize:2097152'
+        ]);
+        $fileValidation->validate();
+
+        if ($formValidation->fails() || $fileValidation->fails()) {
             $this->view->render('posts/create', [
-                'errors' => $validation->getErrors()
+                'errors' => array_merge(
+                    $formValidation->getErrors(),
+                    $fileValidation->getErrors()
+                )
             ]);
         }
 
         $post = new Post($this->db);
-        $post->create($this->user->getId(), $formInput);
-        Session::flash('message', 'Your post has been successfully created');
-        $this->redirectTo('/dashboard');
+
+        try {
+            $post->create($this->user->getId(), $formInput, $fileInput['image']);
+            Session::flash('message', 'Your post has been successfully created');
+            $this->redirectTo('/dashboard');
+        } catch (Exception $e) {
+            $this->view->render('posts/create', [
+                'errors' => [
+                    'root' => $e->getMessage()
+                ]
+            ]);
+        }
     }
 
     public function edit(Request $request)

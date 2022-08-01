@@ -6,12 +6,14 @@ class Request {
     private array $pageParams;
     private array $getParams;
     private array $postParams;
+    private array $fileParams;
 
     public function __construct(array $pageParams)
     {
         $this->pageParams = $pageParams;
         $this->postParams = $_POST;
         $this->getParams = $_GET;
+        $this->fileParams = $_FILES;
     }
 
     public function getMethod(): string
@@ -22,12 +24,13 @@ class Request {
     public function getInput(string $kind = 'post'): array
     {
         $input = match($kind) {
-            'post' => $this->postParams,
-            'get' => $this->getParams,
-            'page' => $this->pageParams
+            'post' => $this->sanitizeInput($this->postParams),
+            'get' => $this->sanitizeInput($this->getParams),
+            'page' => $this->pageParams,
+            'file' => $this->fileParams
         };
 
-        return $this->sanitizeInput($input);
+        return $input;
     }
 
     private function sanitizeInput(array $input): array
