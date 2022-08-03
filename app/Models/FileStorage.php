@@ -32,4 +32,9 @@ class FileStorage {
             throw new Exception('We encountered an error uploading the file.');
         }
     }
+
+    public static function delete(string $path): bool
+    {
+        return unlink(ltrim($path, DIRECTORY_SEPARATOR));
+    }
 }

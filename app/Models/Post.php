@@ -6,6 +6,7 @@ use App\Models\Database;
 use App\Helpers\Str;
 use App\Models\User;
 use App\Config;
+use App\Models\FileStorage;
 
 class Post {
     private Database $db;
@@ -108,10 +109,67 @@ class Post {
 
     public function delete(): bool
     {
+        $images = $this->getImages();
+
+        foreach ($images as $image) {
+            FileStorage::delete($image);
+        }
+
         $sql = "DELETE FROM `posts` WHERE `id` = :id";
         $deleteQuery = $this->db->query($sql, [ 'id' => $this->getId() ]);
 
         return (bool) $deleteQuery->count();
+    }
+
+    public function like(int $userId): bool
+    {
+        $sql = "
+            INSERT INTO `post_likes`
+            (`user_id`, `post_id`, `created_at`)
+            VALUES (:user_id, :post_id, :created_at)
+        ";
+
+        $likeQuery = $this->db->query($sql, [
+            'user_id' => $userId,
+            'post_id' => $this->getId(),
+            'created_at' => time()
+        ]);
+
+        return (bool) $likeQuery->count();
+    }
+
+    public function dislike(int $userId): bool
+    {
+        $sql = "DELETE FROM `post_likes` WHERE `post_id` = :post_id AND `user_id` = :user_id";
+
+        $deleteQuery = $this->db->query($sql, [
+            'post_id' => $this->getId(),
+            'user_id' => $userId
+        ]);
+
+        return (bool) $deleteQuery->count();
+    }
+
+    public function getTotalLikes(): int
+    {
+        $sql = "SELECT COUNT(`id`) as 'like_count' FROM `post_likes` WHERE `post_id` = :post_id";
+
+        $likesQuery = $this->db->query($sql, [
+            'post_id' => $this->getId()
+        ]);
+
+        return (int) $likesQuery->first()['like_count'];
+    }
+
+    public function isLikedBy(int $userId): bool
+    {
+        $sql = "SELECT 1 FROM `post_likes` WHERE `post_id` = :post_id AND `user_id` = :user_id";
+        $likeQuery = $this->db->query($sql, [
+            'post_id' => $this->getId(),
+            'user_id' => $userId
+        ]);
+
+        return (bool) $likeQuery->count();
     }
 
     public function getId(): int
@@ -149,5 +207,17 @@ class Post {
         $user = new User($this->db);
         $user->find($this->getUserId());
         return $user;
+    }
+
+    public function getImages(): array
+    {
+        $sql = "SELECT `filename` FROM `post_images` WHERE `post_id` = :post_id";
+        $query = $this->db->query($sql, [ 'post_id' => $this->getId() ]);
+
+        $images = array_map(function ($image) {
+            return DIRECTORY_SEPARATOR . Config::get('app.uploadFolder') . DIRECTORY_SEPARATOR . $image['filename'];
+        }, $query->results());
+
+        return $images;
     }
 }

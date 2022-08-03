@@ -32,6 +32,10 @@ class Database {
 
     public function query(string $sql, array $values = []): self
     {
+        $values = array_map(function ($value) {
+            return is_string($value) ? htmlspecialchars($value) : $value;
+        }, $values);
+
         $this->statement = $this->pdo->prepare($sql);
         $this->statement->execute($values);
 

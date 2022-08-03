@@ -175,4 +175,64 @@ class PostController extends BaseController {
         Session::flash('message', 'The post was successfully deleted.');
         $this->redirectTo('/dashboard');
     }
+
+    public function like(Request $request)
+    {
+        $getInput = $request->getInput('get');
+        /*if (!isset($getInput['csrfToken']) || $getInput['csrfToken'] !== Session::get('csrfToken')) {
+            Session::flash('message', 'This request did not seem intentional.');
+            $this->redirectTo('/');
+        }*/
+
+        if (!isset($request->getInput('page')[0])) {
+            Session::flash('message', 'You must access this page via a link.');
+            $this->redirectTo('/dashboard');
+        }
+
+        $identifier = $request->getInput('page')[0];
+        $post = new Post($this->db);
+
+        if (!$post->find($identifier)) {
+            Session::flash('message', 'This post could not be found.');
+            $this->redirectTo('/');
+        }
+
+        if (!$this->user->isLoggedIn()) {
+            Session::flash('message', 'You must be signed in to like this post.');
+            $this->redirectTo('/');
+        }
+
+        $post->like($this->user->getId());
+        $this->redirectTo("/post/{$post->getId()}/{$post->getSlug()}");
+    }
+
+    public function dislike(Request $request)
+    {
+        $getInput = $request->getInput('get');
+        /*if (!isset($getInput['csrfToken']) || $getInput['csrfToken'] !== Session::get('csrfToken')) {
+            Session::flash('message', 'This request did not seem intentional.');
+            $this->redirectTo('/');
+        }*/
+
+        if (!isset($request->getInput('page')[0])) {
+            Session::flash('message', 'You must access this page via a link.');
+            $this->redirectTo('/dashboard');
+        }
+
+        $identifier = $request->getInput('page')[0];
+        $post = new Post($this->db);
+
+        if (!$post->find($identifier)) {
+            Session::flash('message', 'This post could not be found.');
+            $this->redirectTo('/');
+        }
+
+        if (!$this->user->isLoggedIn()) {
+            Session::flash('message', 'You must be signed in to like this post.');
+            $this->redirectTo('/');
+        }
+
+        $post->dislike($this->user->getId());
+        $this->redirectTo("/post/{$post->getId()}/{$post->getSlug()}");
+    }
 }
