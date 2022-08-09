@@ -5,6 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Custom CMS</title>
         <link rel="stylesheet" href="./styles/app.css">
+        <script defer type="module" src="/js/main.js"></script>
+        <?php foreach ($scripts ?? [] as $script): ?>
+            <script type="module" defer src="/js/<?=$script?>.js"></script>
+        <?php endforeach; ?>
     </head>
     <body>
         <header>

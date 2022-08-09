@@ -10,17 +10,25 @@ use App\Models\User;
 use Exception;
 
 class LoginController extends BaseController {
+    /**
+     * GET Request on /login
+     */
     public function index(Request $request)
     {
         if ($this->user->isLoggedIn()) {
             $this->redirectTo('/dashboard');
         }
 
-        if ($request->getMethod() !== 'POST') {
-            $this->view->render('login');
-            return;
-        }
+        $this->view->render('login', [
+            'scripts' => [ 'pages/login' ]
+        ]);
+    }
 
+    /**
+     * POST Request on /login to create a user session (login)
+     */
+    public function create(Request $request)
+    {
         $formInput = $request->getInput();
 
         $validation = new FormValidation($formInput, $this->db);
@@ -50,6 +58,5 @@ class LoginController extends BaseController {
                 ]
             ]);
         }
-
     }
 }

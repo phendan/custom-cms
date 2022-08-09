@@ -8,12 +8,16 @@ class Request {
     private array $postParams;
     private array $fileParams;
 
-    public function __construct(array $pageParams)
+    public function __construct()
     {
-        $this->pageParams = $pageParams;
         $this->postParams = $_POST;
         $this->getParams = $_GET;
         $this->fileParams = $_FILES;
+    }
+
+    public function setPageParams(array $pageParams): void
+    {
+        $this->pageParams = $pageParams;
     }
 
     public function getMethod(): string

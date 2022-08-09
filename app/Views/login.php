@@ -1,6 +1,6 @@
 <h1>Login</h1>
 
-<form method="post" novalidate>
+<form method="post" novalidate class="login-form">
     <?php if (isset($errors['root'])): ?>
         <div class="error"><?=$errors['root']?></div>
     <?php endif; ?>
