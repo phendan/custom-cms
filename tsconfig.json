@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "ES2018",
+        "module": "ESNext",
+        "moduleResolution": "Node",
+        "noEmitOnError": true,
+        "forceConsistentCasingInFileNames": false,
+        "strict": true,
+        "esModuleInterop": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./client/*"]
+        }
+    },
+    "include": ["./client/**/*.ts"]
+}

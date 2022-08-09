@@ -1,0 +1,32 @@
+{
+    "name": "custom-cms",
+    "version": "1.0.0",
+    "description": "A custom CMS written in PHP",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "npx rollup --config rollup.config.js --watch"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/phendan/custom-cms.git"
+    },
+    "author": "Philip Braunen",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/phendan/custom-cms/issues"
+    },
+    "homepage": "https://github.com/phendan/custom-cms#readme",
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^22.0.2",
+        "@rollup/plugin-node-resolve": "^13.3.0",
+        "@rollup/plugin-typescript": "^8.3.4",
+        "rollup": "^2.77.2",
+        "rollup-plugin-terser": "^7.0.2",
+        "tslib": "^2.4.0",
+        "typescript": "^4.7.4"
+    },
+    "dependencies": {
+        "axios": "^0.27.2"
+    }
+}
